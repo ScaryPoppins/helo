@@ -4,56 +4,76 @@ import heloLogo from '../../assets/helo_logo.png'
 import DashBoard from '../Dashboard/Dashboard'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { handleUpdateUser } from '../../ducks/reducer'
+import { getUser } from '../../ducks/reducer'
 
-export default class Auth extends Component {  
+class Auth extends Component {  
     
     constructor() {
       super();
 
       this.state = {
-        username: "",
-        password: ""
+        username: '',
+        password: '',
+        user: []
       };
     }
     
 
-    componentDidMount() {
-        axios
-            .get('/api/auth/user')
-            .then((user) => {
-                this.props.getUser(user.data) 
-        })
+    componentDidMount(){
+        this.props.getUser()
+        this.updateUser()
     }
-
+    updateUser(user){
+        this.setState({user:user})
+      }  
 
     handleChange= (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    logInUser = () => {
-        let { username, password }= this.state
+    // loginUser = () => {
+    //     let { username, password }= this.state
+    //     axios
+    //         .post('/api/auth/login', { username, password })
+    //         .then(user => {
+    //             this.props.getUser(user.data) 
+    //             this.setState({
+    //                 username: '',
+    //                 password: ''
+    //             })
+    //         })
+    //         .catch(() => alert('Incorrect username or password'));
+    // }
+
+    loginUser(e){
+        e.preventDefault()
+        let {username, password} = this.state;
         axios
-            .post('/api/auth/login', { username, password })
-            .then(user => {
-                this.props.getUser(user.data) 
+            .post('/auth/login', {username, password})
+            .then(user=>{
+                    console.log(user.data)
+                this.props.getUser(user.data)
+                    console.log(username)
+                    console.log(password)
                 this.setState({
-                    username: '',
-                    password: ''
-                })
+                    username: '', 
+                    password: '', 
+                    redirect: true});
             })
-            .catch(() => alert('Incorrect username or password'));
+            .catch((err)=>{
+                this.setState({username: '', password: ''});
+                console.log(err, 'Login failed in Auth component');
+            })
     }
-
-
 
 
     render() {
         console.log(this.props)
-        // let { id } = this.props.user
+        console.log(this.props.user)
+        console.log(this.state)
 
         return (
-        // !id ? (
+         !this.props.user ? (
 
           <div className= 'auth-container background'>
               <div className= 'auth-form-container background'>
@@ -89,7 +109,7 @@ export default class Auth extends Component {
 
                   <div className = 'auth-buttons-container'>
                     <button className = 'auth-buttons'
-                    onClick={() => this.logInUser()}
+                    onClick={(e) => this.loginUser(e)}
                     >Login</button>
 
                     <button className = 'auth-buttons'>Register</button>
@@ -100,11 +120,27 @@ export default class Auth extends Component {
         
           </div>
         
-        // ) 
-        // :
-        // (
-        //     <DashBoard/>
-        // )
+         ) 
+         :
+         (
+             <DashBoard/>
+         )
         )
       }  
     }
+
+
+
+    // Login.propTypes = {
+    //     classes: PropTypes.object.isRequired,
+    //   }
+    
+    
+      const mapStateToProps = state =>{
+        // console.log(state);
+        return{
+            user: state.user
+        }
+    }
+
+    export default (connect(mapStateToProps, {getUser})(Auth))

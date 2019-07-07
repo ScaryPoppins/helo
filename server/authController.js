@@ -15,7 +15,7 @@ module.exports = {
             } else {
                 bcrypt.hash(password, 10).then(newPassword => {
                     //create new user
-                    db.add_user(username, newPassword).then(() => {
+                    db.add_user(username, newPassword, profile_pic).then(() => {
                         res.status(200).json(username)
                     })
                 })
@@ -26,6 +26,7 @@ module.exports = {
 
     loginUser: (req,res) => {
         const {username, password} = req.body
+        console.log(req.body)
         const db = req.app.get('db')
 
         db.find_user(username)
@@ -41,8 +42,8 @@ module.exports = {
                             username: user[0].username,
                             id: user[0].id,
                             profile: user[0].profile_pic,
-                            user: user[0],
-                            users: user,
+                            // user: user[0],
+                            // users: user,
  
                         }
                         console.log("this is session after user",req.session.user)
@@ -55,6 +56,7 @@ module.exports = {
 
     getUser: (req, res) => {
         if(req.session.user) {
+            console.log(req.session.user)
             res.json(req.session.user)
         } else {
             res.status(401).json({error: 'Please log in.'})
