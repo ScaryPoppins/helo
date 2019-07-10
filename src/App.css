@@ -1,4 +1,12 @@
+/* .App{
+  display: flex;
+} */
+
+
 .background {
   background: rgb(255,112,166);
   background: linear-gradient(90deg, rgba(255,112,166,1) 0%, rgba(255,151,112,1) 35%, rgba(255,214,112,1) 100%);
   }
+
+
+  

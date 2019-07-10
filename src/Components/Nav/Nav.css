@@ -1,0 +1,35 @@
+.nav-container{
+    width: 15vw;
+    height: 95%;
+    position: absolute;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5vh;
+    max-height: 100vh;
+}
+
+.nav-buttons-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+#profile-pic{
+    max-width: 7vw;
+    max-height: 7vw;
+    border-radius: 50px;
+}
+
+#asset-logo{
+    max-width: 7vw;
+    max-height: 7vw;
+}
+
+.logout{
+    position: absolute;
+    bottom: 0;
+}

@@ -66,6 +66,30 @@ module.exports = {
     logOutUser: (req, res) => {
         req.session.destroy()
         res.status(200).send(req.session)
+    },
+
+    session: async (req,res) => {
+        const db = req.app.get('db'),
+        { username } = req.session.user;
+    
+        const foundUser = await db.find_user([username]);
+        const user = foundUser[0];
+        if (req.session) {
+            req.session.user = {                             
+                username: user.username,
+                id: user.id,
+                profile: user.profile_pic, };
+        
+            return res.send(req.session.user);
+        }
     }
+
+
+
+
+
+
+
+
 }
 

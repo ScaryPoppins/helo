@@ -1,0 +1,32 @@
+.dashboard-container{
+    width: 80vw;
+    max-height: 100vh;
+    display: flex;
+    padding: 5vh;
+    margin-left: 15vw;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+}
+.search-bar-container{
+    width: 75%;
+    height: 50px;
+    border: 1px solid gray;
+    margin-bottom: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+}
+
+.my-post-check{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.messages-container{
+    width: 75%;
+    min-height: 15vh;
+    border: 1px solid gray;
+}

@@ -8,24 +8,31 @@ import { getUser } from '../../ducks/reducer'
 
 class Auth extends Component {  
     
-    constructor() {
-      super();
+    constructor(props) {
+      super(props);
 
       this.state = {
         username: '',
         password: '',
-        user: []
+        user: [], 
+        // redirect: false
       };
     }
     
 
-    componentDidMount(){
-        this.props.getUser()
-        this.updateUser()
-    }
-    updateUser(user){
-        this.setState({user:user})
-      }  
+    componentDidMount() {
+      axios
+          .get('/auth/session')
+          .then((user) => {
+              this.props.getUser(user.data) 
+      })
+  }
+
+  //uncomment
+   // componentDidMount(){
+    // updateUser(user){
+    //     this.setState({user:user})
+    //   }  
 
     handleChange= (e) => {
         this.setState({ [e.target.name]: e.target.value })
@@ -53,12 +60,14 @@ class Auth extends Component {
             .then(user=>{
                     console.log(user.data)
                 this.props.getUser(user.data)
-                    console.log(username)
-                    console.log(password)
+                    console.log(user)
+                //     console.log(username)
+                //     console.log(password)
                 this.setState({
                     username: '', 
                     password: '', 
-                    redirect: true});
+                    // redirect: true
+                  });
             })
             .catch((err)=>{
                 this.setState({username: '', password: ''});
@@ -70,10 +79,12 @@ class Auth extends Component {
     render() {
         console.log(this.props)
         console.log(this.props.user)
-        console.log(this.state)
+        // console.log(this.props.user.username)
+        // console.log(this.state)
+      
 
         return (
-         !this.props.user ? (
+         !this.props.user.username ? (
 
           <div className= 'auth-container background'>
               <div className= 'auth-form-container background'>
@@ -112,7 +123,7 @@ class Auth extends Component {
                     onClick={(e) => this.loginUser(e)}
                     >Login</button>
 
-                    <button className = 'auth-buttons'>Register</button>
+                    <button className = 'auth-buttons'>Register in postman</button>
                 </div>
             </form>
 
@@ -143,4 +154,11 @@ class Auth extends Component {
         }
     }
 
-    export default (connect(mapStateToProps, {getUser})(Auth))
+
+
+
+  //   function mapStateToProps(state) {
+  //     const { user } = state
+  //     return { user }
+  // }
+    export default connect(mapStateToProps, {getUser})(Auth)

@@ -1,20 +1,106 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { getUser } from '../../ducks/reducer'
+import axios from 'axios'
+import Nav from '../Nav/Nav'
+import search_logo from '../../assets/search_logo.png'
+import './Dashboard.css'
 
-export default class Dashboard extends Component {  
+class Dashboard extends Component {  
     
     constructor() {
       super();
 
       this.state = {
+        search: '',
+        messages: [],
+        user: []
 
       };
     }
-    
-    render() {
-        return (
-          <div className= 'dashboard'>
-              Dashboard
-          </div>
-        )
-      }
+
+    componentDidMount(){
+        // this.props.getUser()
+        this.updateUser()
     }
+    updateUser(user){
+        this.setState({user:user})
+      }  
+    handleChange= (e) => {
+      this.setState({ [e.target.name]: e.target.value })
+    }
+
+    getMessages = () => {
+      axios
+          .get('/api/messages')
+          .then(response => {
+              this.setState({ messages: response.data })
+          })
+    }
+
+
+
+
+
+    render() {
+        console.log(this.props)
+      let { search, messages } = this.state
+      let displayMessages = messages.map(message => {
+          return (
+              <div className='message-map' key={message.id}>
+                  <div className='title'>
+                      <h2>{message.title}</h2>
+                  </div>
+                  <div className="info">
+                      <h5>{message.username}</h5>
+                      <img src={message.img} alt="post"/>
+                  </div>
+              </div>
+          )
+      })
+      return (
+          <div>
+
+          <Nav />
+              <div className="dashboard-container">
+              <div className='search-bar-container'>
+              <form className='search'>
+                  <input type='text' name='search' value={search}
+                  onChange={e => this.handleChange(e)}
+                  />
+                  <button>
+                      <img src= {search_logo} alt="Search"/>
+                  </button>
+                  <button>
+                      Reset
+                  </button>
+              </form>
+              <div className='my-post-check'>
+                  <h6>My Posts</h6>{'  '}
+                  <input type='checkbox'/>
+              </div>
+
+
+              </div>
+
+
+            <div className = 'messages-container'>
+              <div className='messages'>
+                  {displayMessages}
+              </div>
+            </div>
+              
+          </div>
+          </div>
+      )
+  }
+}
+
+const mapStateToProps = state =>{
+  // console.log(state);
+  return{
+      user: state.user
+  }
+}
+
+export default (connect(mapStateToProps, {getUser})(Dashboard))
