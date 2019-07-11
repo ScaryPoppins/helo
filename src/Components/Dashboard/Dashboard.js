@@ -13,8 +13,10 @@ class Dashboard extends Component {
 
       this.state = {
         search: '',
+        searchResults: '',
         messages: [],
         user: []
+      
 
       };
     }
@@ -34,7 +36,7 @@ class Dashboard extends Component {
 
 
     componentDidUpdate(prevProps) {
-      console.log(this.props.username)
+      // console.log(this.props.username)
  
        if (prevProps.username !== this.props.username ) alert(`Welcome, ${this.props.user.username}!`);
       }
@@ -49,6 +51,13 @@ class Dashboard extends Component {
       this.setState({ [e.target.name]: e.target.value })
     }
 
+    searchTitle(){
+      axios.get(`/api/buys/title/${this.state.search}`)
+          .then(res => this.setState({searchResults: res.data }))
+  }
+
+
+
     getMessages = () => {
       axios
           .get('/api/messages')
@@ -62,10 +71,11 @@ class Dashboard extends Component {
 
 
     render() {
-        console.log(this.props.user)
+        // console.log(this.props.user)
+        console.log(this.state.search)
       let { search, messages } = this.state
       let displayMessages = messages.map(message => {
-          return (
+          return (          
               <div className='message-map' key={message.id}>
                   <div className='title'>
                       <h2>{message.title}</h2>
@@ -84,11 +94,17 @@ class Dashboard extends Component {
           <Nav />
               <div className="dashboard-container">
               <div className='search-bar-container'>
+
+ {/*  search  */}
               <form className='search'>
                   <input type='text' name='search' value={search}
                   onChange={e => this.handleChange(e)}
                   />
-                  <button>
+                  <button
+                  onClick={()=> {
+                    console.log(this.state.search)
+                    this.searchTitle(this.state.search)}}
+                  >
                       <img src= {search_logo} alt="Search"/>
                   </button>
                   <button>
