@@ -4,7 +4,7 @@ const app = express();
 const massive = require("massive");
 const session = require('express-session')
 const { SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env;
-const {registerUser, loginUser, getUser, logOutUser} = require('./authController');
+const {registerUser, loginUser, getUser, logOutUser, editProfilePic} = require('./authController');
 const {postMessage, getMessages} = require('./userController')
 
 app.use(express.json());
@@ -36,7 +36,8 @@ app.post('/auth/register', registerUser);
 app.post('/auth/login', loginUser);
 app.post('/auth/user', logOutUser);
 app.get('/auth/user', getUser);
-app.get('/auth/session', session);
+// app.get('/auth/session', session);
+app.put('/api/auth/editProfilePic', editProfilePic)
 
 // user endpoints
 app.post('/api/post/', postMessage)

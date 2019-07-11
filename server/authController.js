@@ -82,7 +82,18 @@ module.exports = {
         
             return res.send(req.session.user);
         }
-    }
+    }, 
+
+    editProfilePic: async function(req, res) {
+        // const {profile_pic} = req.params;
+        const db = req.app.get('db');
+        console.log(req.session.user.id)
+        console.log(req.body.newProfilePic)
+        console.log('hit')
+        await db.edit_profile_pic(req.session.user.id, req.body.newProfilePic);
+  
+        res.sendStatus(200);
+     },
 
 
 

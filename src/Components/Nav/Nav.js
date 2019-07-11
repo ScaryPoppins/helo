@@ -14,49 +14,26 @@ class Nav extends Component {
       super(props);
       this.state = {
          editMode: false,
-         userName: ''
+         newProfilePic: ''
       }
-      // this.handleLogout = this.handleLogout.bind(this);
-      // this.handleInputChange = this.handleInputChange.bind(this);
-      // this.handleInputSubmit = this.handleInputSubmit.bind(this);
-      // this.updateUserInfo = this.updateUserInfo.bind(this);
+      this.handleInputSubmit = this.handleInputSubmit.bind(this);
    }
 
+   handleChange= (e) => {
+      this.setState({ [e.target.name]: e.target.value })
+      console.log(this.state.newProfilePic)
+  }
 
-   // componentDidUpdate(prevProps) {
-   //   console.log(this.props.user.username)
-
-   //    if (prevProps.user.username !== this.props.user.username ) alert(`Welcome NAVANANA, ${this.props.user.username}!`);
-   //   }
-
-
-
-  //  updateUserInfo() {
-  //     Axios
-  //        .get('/auth/session')
-  //        .then(res => this.props.updateUser(res.data.user))
-  //        .then(this.setState({ 
-  //           username: this.props.username,
-  //           editMode: false
-  //         }))
-  //        .catch(err => console.log(err.request));
-  //  }
-
-
-  //  handleInputChange(e) {
-  //     const {name, value, id} = e.target;
-
-  //     if (id === 'editMode') return this.setState({ editMode: true });
-
-  //     this.setState({ [name]: value })
-  //  }
-  //  handleInputSubmit() {
-  //     Axios
-  //        .put(`/auth/updateusername/${this.state.userName}`)
-  //        .then(() => this.updateUserInfo())
-  //        .catch(err => console.log(err.request));
-  //  }
-
+   handleInputSubmit(e) {
+      e.preventDefault()
+      let {newProfilePic} = this.state
+      console.log(this.props.user.id)
+      console.log(this.state.newProfilePic)
+      Axios
+         .put(`/api/auth/editProfilePic`, {newProfilePic})
+         .then(() => this.editProfilePic())
+         .catch(err => console.log(err.request));
+   }
 
    handleLogout() {
       Axios
@@ -68,11 +45,13 @@ class Nav extends Component {
          })
          .catch(err => console.log(err.request));
    }
+
+
+
    render() {
     console.log(this.props.user.username)
-
-
-
+    console.log(this.props.user.id)
+    console.log(this.state.newProfilePic)
       return (
          <div className = 'nav-container background'>
 
@@ -80,7 +59,7 @@ class Nav extends Component {
        
 
               
-                     {!this.props.user.username ? (
+                     {this.props.user.profile ? (
                     <img src={this.props.user.profile} alt="profile pic" id='profile-pic'/>
                      )
                      :
@@ -88,7 +67,26 @@ class Nav extends Component {
                       <img src={noImage} alt="no pic" id='asset-logo'/>
                      )}
 
+{/* change profile pic */}
+                     <form>
+                        <input
+                        type='text'
+                        defaultValue={this.state.newProfilePic}
+                        name='newProfilePic'
+                        id={this.props.user.id}
+                        onChange={this.handleChange}
+                        >
+                        </input>
 
+                        <button
+                        onClick={this.handleInputSubmit}
+                        > 
+                           Submit
+                        </button>
+                     </form>
+
+
+{/* other stuff */}
                     <h6>{this.props.user.username}</h6>
                     <Link to={`/Dashboard/${this.props.user.id}`}>
                     <img src={homeLogo} alt="home" id='asset-logo'/>
