@@ -23,49 +23,56 @@ class Nav extends Component {
    }
 
 
-  //  componentDidMount() {
-  //     this.props.getUser();
-  //     console.log(this.props)
-  //  }
+   // componentDidUpdate(prevProps) {
+   //   console.log(this.props.user.username)
+
+   //    if (prevProps.user.username !== this.props.user.username ) alert(`Welcome NAVANANA, ${this.props.user.username}!`);
+   //   }
 
 
 
-  //  componentDidUpdate(prevProps) {
-  //     if (prevProps.user.username !== this.props.user.username ) alert(`Welcome, ${this.props.user.username}!`);
-  //  }
   //  updateUserInfo() {
   //     Axios
   //        .get('/auth/session')
-  //        .then(res => this.props.updateUser(res.data.username, res.data.profilePic))
+  //        .then(res => this.props.updateUser(res.data.user))
   //        .then(this.setState({ 
   //           username: this.props.username,
   //           editMode: false
   //         }))
   //        .catch(err => console.log(err.request));
   //  }
-   handleInputChange(e) {
-      const {name, value, id} = e.target;
 
-      if (id === 'editMode') return this.setState({ editMode: true });
 
-      this.setState({ [name]: value })
-   }
-   handleInputSubmit() {
-      Axios
-         .put(`/auth/updateusername/${this.state.userName}`)
-         .then(() => this.updateUserInfo())
-         .catch(err => console.log(err.request));
-   }
+  //  handleInputChange(e) {
+  //     const {name, value, id} = e.target;
+
+  //     if (id === 'editMode') return this.setState({ editMode: true });
+
+  //     this.setState({ [name]: value })
+  //  }
+  //  handleInputSubmit() {
+  //     Axios
+  //        .put(`/auth/updateusername/${this.state.userName}`)
+  //        .then(() => this.updateUserInfo())
+  //        .catch(err => console.log(err.request));
+  //  }
+
+
    handleLogout() {
       Axios
-         .post('/auth/logout')
+         .post('/auth/user')
          .then(() => {
             this.props.getUser('');
             this.props.history.push('/');
+            console.log(this.user.session)
          })
          .catch(err => console.log(err.request));
    }
    render() {
+    console.log(this.props.user.username)
+
+
+
       return (
          <div className = 'nav-container background'>
 
@@ -93,7 +100,7 @@ class Nav extends Component {
 
                     <div className="logout">
                     <img src={shutDown} alt="logout" id='asset-logo'
-                    onClick={() => this.logout()}
+                    onClick={() => this.handleLogout()}
                     />
                     </div>
                   

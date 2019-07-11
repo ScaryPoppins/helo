@@ -22,7 +22,26 @@ class Dashboard extends Component {
     componentDidMount(){
         // this.props.getUser()
         this.updateUser()
+
+        axios
+        .get('/api/messages')
+          .then(res => this.setState({
+            messages : res.data
+          }))
     }
+
+
+
+
+    componentDidUpdate(prevProps) {
+      console.log(this.props.username)
+ 
+       if (prevProps.username !== this.props.username ) alert(`Welcome, ${this.props.user.username}!`);
+      }
+
+
+
+
     updateUser(user){
         this.setState({user:user})
       }  
@@ -43,7 +62,7 @@ class Dashboard extends Component {
 
 
     render() {
-        console.log(this.props)
+        console.log(this.props.user)
       let { search, messages } = this.state
       let displayMessages = messages.map(message => {
           return (
@@ -53,7 +72,8 @@ class Dashboard extends Component {
                   </div>
                   <div className="info">
                       <h5>{message.username}</h5>
-                      <img src={message.img} alt="post"/>
+
+                      <img className = 'message-map-img' src={message.img} alt="post"/>
                   </div>
               </div>
           )

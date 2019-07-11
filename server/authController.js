@@ -4,7 +4,7 @@ module.exports = {
 
     registerUser: (req, res) => {
         console.log(req.body)
-        const {username, password} = req.body
+        const {username, password, profile_pic} = req.body
         const db = req.app.get('db')
 
         //does user already exist?
@@ -40,7 +40,7 @@ module.exports = {
                     } else {
                         req.session.user = {
                             username: user[0].username,
-                            id: user[0].id,
+                            id: user[0].users_id,
                             profile: user[0].profile_pic,
                             // user: user[0],
                             // users: user,

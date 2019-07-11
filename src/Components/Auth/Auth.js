@@ -20,13 +20,13 @@ class Auth extends Component {
     }
     
 
-    componentDidMount() {
-      axios
-          .get('/auth/session')
-          .then((user) => {
-              this.props.getUser(user.data) 
-      })
-  }
+  //   componentDidMount() {
+  //     axios
+  //         .get('/auth/session')
+  //         .then((user) => {
+  //             this.props.getUser(user.data) 
+  //     })
+  // }
 
   //uncomment
    // componentDidMount(){
@@ -58,15 +58,14 @@ class Auth extends Component {
         axios
             .post('/auth/login', {username, password})
             .then(user=>{
-                    console.log(user.data)
+    
                 this.props.getUser(user.data)
-                    console.log(user)
-                //     console.log(username)
-                //     console.log(password)
+                console.log(user.data)
+            
                 this.setState({
                     username: '', 
                     password: '', 
-                    // redirect: true
+
                   });
             })
             .catch((err)=>{
@@ -79,6 +78,7 @@ class Auth extends Component {
     render() {
         console.log(this.props)
         console.log(this.props.user)
+
         // console.log(this.props.user.username)
         // console.log(this.state)
       
@@ -134,7 +134,11 @@ class Auth extends Component {
          ) 
          :
          (
-             <DashBoard/>
+
+
+             <DashBoard username={this.state.username}  />
+
+
          )
         )
       }  
